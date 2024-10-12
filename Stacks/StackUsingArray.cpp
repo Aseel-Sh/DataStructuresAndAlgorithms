@@ -28,7 +28,6 @@ class Stack {
         if (top == -1)
         {
             cout << "stack is empty";
-            return;
         }
         
         return arr[top--];
@@ -44,3 +43,22 @@ class Stack {
     }
 
 };
+
+int main (){
+
+
+    Stack s;
+    Stack s1;
+
+    s.push(1);
+    s.push(3);
+    cout << s.pop()<<endl;
+    cout << s.Peek()<<endl;
+    s.push(7);
+    cout << s.Peek()<<endl;
+    cout<< s.isEmpty()<<endl;
+    cout<< s1.isEmpty()<<endl;
+    s1.pop();
+
+    return 0;
+}

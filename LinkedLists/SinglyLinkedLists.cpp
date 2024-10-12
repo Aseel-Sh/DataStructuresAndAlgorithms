@@ -171,6 +171,56 @@ class LinkedList {
         }
     }
 
+    //remove
+    void Remove(int val){
+        //list is empty
+        if (head == nullptr) {
+            cout << "List is empty" << endl;
+            return;
+        }
+
+        //node to remove is the head
+        if (head->data == val) {
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+            return;
+        }
+
+        //Traverse the list
+        Node* prev = nullptr;
+        Node* curr = head;
+
+        while (curr != nullptr && curr->data != val) {
+            prev = curr;
+            curr = curr->next;
+        }
+
+        //node was not found
+        if (curr == nullptr) {
+            cout << "Node not found." << endl;
+            return;
+        }
+
+        //Remove the node
+        prev->next = curr->next;
+        delete curr;        
+    }
+
+    //getlength
+    int getLength(){
+        int length = 0;
+        Node *temp = head;
+
+        while(temp != nullptr){
+            length ++;
+            temp = temp->next;
+        }
+
+        return length;
+    }
+    //sort
+
 
 };
 

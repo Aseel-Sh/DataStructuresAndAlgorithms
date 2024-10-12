@@ -218,6 +218,55 @@ class LinkedList {
         
     }
 
+    void remove(int data) {
+        Node* temp = head;
+        while (temp != nullptr && temp->data != data) {
+            temp = temp->next;
+        }
+        if (temp == nullptr) {
+            cout << "Node with data " << data << " not found." << endl;
+            return;
+        }
+        if (temp == head) {
+            head = temp->next;
+            if (head != nullptr) {
+                head->prev = nullptr;
+            } else {
+                tail = nullptr;
+            }
+            delete temp;
+            return;
+        }
+        if (temp == tail) {
+            tail = temp->prev;
+            tail->next = nullptr;
+            delete temp;
+            return;
+        }
+        Node* prevNode = temp->prev;
+        Node* nextNode = temp->next;
+        if (prevNode != nullptr) {
+            prevNode->next = nextNode;
+        }
+        if (nextNode != nullptr) {
+            nextNode->prev = prevNode;
+        }
+        delete temp;
+    }
+
+    //getlength
+    int getLength(){
+        int length = 0;
+        Node *temp = head;
+
+        while(temp != nullptr){
+            length ++;
+            temp = temp->next;
+        }
+
+        return length;
+    }
+
 };
 
 int main() {
@@ -243,7 +292,8 @@ int main() {
     cout << "Remove node after 3: ";
     list.DeleteAfter(node3);
     list.print();
-
+    
+    
     list.printReverse();
 
     return 0;

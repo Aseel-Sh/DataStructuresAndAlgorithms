@@ -81,7 +81,7 @@ public:
 
     // Get the current length of the queue
     int getLength(){
-        return capacity;  // The number of elements in the queue is tracked by count
+        return capacity; 
     }
 };
 

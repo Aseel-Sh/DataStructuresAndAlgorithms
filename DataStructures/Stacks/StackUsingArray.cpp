@@ -46,6 +46,17 @@ class Stack {
         return top + 1;
     }
 
+    void printStack() {
+        if (isEmpty()) {
+            cout << "Stack is empty\n";
+            return;
+        }
+        for (int i = 0; i <= top; i++) {
+            cout << arr[i] << " "; 
+        }
+        cout << endl;
+    }
+
     void selectionSort() {
         int length = getLength();
         for (int i = 0; i < length - 1; i++) {

@@ -83,6 +83,75 @@ public:
     int getLength(){
         return capacity; 
     }
+
+    void printQueue() {
+        if (isEmpty()) {
+            cout << "Queue is empty\n";
+            return;
+        }
+
+        int i = front;
+        while (true) {
+            cout << array[i] << " ";
+            if (i == rear) break;  
+            i = (i + 1) % size;  
+        }
+        cout << endl;
+    }
+
+    void bubbleSort() {
+    int length = getLength();
+    bool swapped;
+
+    for (int i = 0; i < length - 1; i++) {
+        swapped = false;
+        int current = front;
+        for (int j = 0; j < length - i - 1; j++) {
+            int next = (current + 1) % size;  
+            if (array[current] > array[next]) {
+                swap(array[current], array[next]);
+                swapped = true;
+            }
+            current = next;  
+        }
+
+        if (!swapped) {
+            break;  
+        }
+        }
+    }
+    void selectionSort(){
+    int length = getLength();
+    for (int i = 0; i < length - 1; i++) {
+        int currentIndex = (front + i) % size;
+        int minIndex = currentIndex;
+        for (int j = i + 1; j < length; j++) {
+            int nextIndex = (front + j) % size;
+            if (array[nextIndex] < array[minIndex]) {
+                minIndex = nextIndex;
+            }
+        }
+            swap(array[currentIndex], array[minIndex]);
+        }
+    }
+
+    void insertionSort() {
+    int length = getLength();
+    for (int i = 1; i < length; i++) {
+        int currentIndex = (front + i) % size;
+        int key = array[currentIndex];
+        int j = i - 1;
+        int prevIndex = (front + j) % size;
+
+        while (j >= 0 && array[prevIndex] > key) {
+            int nextIndex = (prevIndex + 1) % size;
+            array[nextIndex] = array[prevIndex];
+            j--;
+            prevIndex = (front + j) % size;
+        }
+        array[(prevIndex + 1) % size] = key;
+    }
+}
 };
 
 int main() {

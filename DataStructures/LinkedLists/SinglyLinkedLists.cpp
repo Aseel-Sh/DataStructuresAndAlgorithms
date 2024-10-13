@@ -221,9 +221,88 @@ class LinkedList {
     }
     
     //sort
+    Node* selectionSort(){
+        for (Node* curr = head; curr != nullptr; curr= curr->next)
+        {
+            Node* min = curr;
+            for (Node* temp = curr->next; temp != nullptr; temp = temp->next){
+                if (temp->data < min->data)
+                {
+                    min = temp;
+                }
+            }
+            swap(curr->data, min->data);
+        }
+       return head; 
+    }
 
+    Node* bubbleSort(){
+        if (head == nullptr || head->next == nullptr)
+        {
+            return head;
+        }
+        bool swapped;
+        do
+        {
+            swapped = false;
+            Node* curr = head;
+            while (curr->next != nullptr)
+            {
+                if (curr->data > curr->next->data)
+                {
+                    swap(curr->data, curr->next->data);
+                    swapped = true;
+                }
+                curr = curr->next;
+            }
+            
+        } while (swapped);
+        
+        return head;
+    }
 
+    Node* insertionSort(){
+        if(head == nullptr || head->next == nullptr)
+        {
+            return head;
+        }
+
+        Node* sorted = nullptr;
+        Node* curr = head;
+
+        while (curr != nullptr)
+        {
+            Node* next = curr->next;
+            sorted = sortedInsert(sorted, curr);
+            curr = next;
+        }
+
+        head = sorted;
+        return head;
+        
+    }
+
+    Node* sortedInsert(Node* sorted, Node* newNode){
+        //special case for head
+        if (!sorted || sorted->data >= newNode->data)
+        {
+            newNode->next = sorted;
+            return newNode;
+        }
+
+        Node* curr = sorted;
+        while (curr->next != nullptr && curr->next->data < newNode->data )
+        {
+            curr = curr->next;
+        }
+
+        newNode->next = curr->next;
+        curr->next = newNode;
+        
+        return sorted;
+    }
 };
+
 
 int main(){
     LinkedList list;
@@ -236,6 +315,8 @@ int main(){
     list.Prepend(3);
     list.Prepend(7);
 
+    list.insertionSort();
+    //list.selectionSort();
     list.print();
     cout << endl;
 
@@ -244,6 +325,7 @@ int main(){
     list2.Append(0);
     list2.Append(9);
 
+    list2.bubbleSort();
     list2.print();
     cout<<endl;
 
@@ -295,6 +377,7 @@ int main(){
     cout << "check if empty: "<<endl;
     cout<< list2.isEmpty() << endl;
     cout<< list4.isEmpty() << endl;
+
 
     return 0;
 }

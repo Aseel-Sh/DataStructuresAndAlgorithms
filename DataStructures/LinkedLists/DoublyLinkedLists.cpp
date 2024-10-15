@@ -266,6 +266,79 @@ class LinkedList {
 
         return length;
     }
+    // Bubble sort
+    void bubbleSort() {
+        if (head == nullptr) return;
+
+        bool swapped;
+        Node* ptr1;
+        Node* lptr = nullptr;
+
+        do {
+            swapped = false;
+            ptr1 = head;
+
+            while (ptr1->next != lptr) {
+                if (ptr1->data > ptr1->next->data) {
+                    swap(ptr1->data, ptr1->next->data);
+                    swapped = true;
+                }
+                ptr1 = ptr1->next;
+            }
+            lptr = ptr1;
+        } while (swapped);
+    }
+
+    // Selection sort
+    void selectionSort() {
+        if (head == nullptr) return;
+
+        for (Node* i = head; i->next != nullptr; i = i->next) {
+            Node* minNode = i;
+            for (Node* j = i->next; j != nullptr; j = j->next) {
+                if (j->data < minNode->data) {
+                    minNode = j;
+                }
+            }
+            swap(i->data, minNode->data);
+        }
+    }
+
+    // Insertion sort
+    void insertionSort() {
+        if (head == nullptr) return;
+
+        Node* sorted = nullptr;
+
+        Node* current = head;
+        while (current != nullptr) {
+            Node* next = current->next;
+            if (sorted == nullptr || sorted->data >= current->data) {
+                current->next = sorted;
+                if (sorted != nullptr) sorted->prev = current;
+                sorted = current;
+                sorted->prev = nullptr;
+            }
+            else {
+                Node* temp = sorted;
+                while (temp->next != nullptr && temp->next->data < current->data) {
+                    temp = temp->next;
+                }
+                current->next = temp->next;
+                if (temp->next != nullptr) temp->next->prev = current;
+                temp->next = current;
+                current->prev = temp;
+            }
+            current = next;
+        }
+        head = sorted;
+
+        // Update tail
+        tail = head;
+        while (tail->next != nullptr) {
+            tail = tail->next;
+        }
+    }
 
 };
 

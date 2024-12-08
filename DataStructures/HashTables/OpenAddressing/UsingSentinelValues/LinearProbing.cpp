@@ -3,12 +3,12 @@
 #include <cassert>
 using namespace std;
 
-typedef int ItemType; 
-const int TABLE_SIZE = 31; 
+typedef int ItemType;
+const int TABLE_SIZE = 31;
 
 struct TableNode {
-    int key;         
-    ItemType data;   
+    int key;
+    ItemType data;
 
     TableNode() : key(-1), data(0) {} //-1 means empty
 };
@@ -24,9 +24,10 @@ public:
 
 private:
     int hash(int key) const;
+    int linearProbe(int key, int attempt) const;
     void findIndex(int key, bool& found, int& index) const;
 
-    TableNode table[TABLE_SIZE]; 
+    TableNode table[TABLE_SIZE];
     int used;
 };
 
@@ -41,16 +42,23 @@ int HashTable::hash(int key) const {
     return key % TABLE_SIZE;
 }
 
-void HashTable::findIndex(int key, bool& found, int& index) const {
-    int count = 0;
-    index = hash(key);
+int HashTable::linearProbe(int key, int attempt) const {
+    return (hash(key) + attempt) % TABLE_SIZE;
+}
 
-    while (count < TABLE_SIZE && table[index].key != -1 && table[index].key != key) {
-        index = (index + 1) % TABLE_SIZE;
-        count++;
+void HashTable::findIndex(int key, bool& found, int& index) const {
+    int attempt = 0;
+    while (attempt < TABLE_SIZE) {
+        index = linearProbe(key, attempt);
+
+        if (table[index].key == -1 || (table[index].key == key && table[index].key != -999)) {
+            found = (table[index].key == key);
+            return;
+        }
+        attempt++;
     }
 
-    found = (table[index].key == key);
+    found = false;
 }
 
 void HashTable::insert(const TableNode& entry) {
@@ -59,15 +67,23 @@ void HashTable::insert(const TableNode& entry) {
 
     findIndex(entry.key, alreadyThere, index);
     if (alreadyThere) {
-        table[index] = entry;
+        table[index].data = entry.data; //update existing record
     } else {
-        assert(size() < TABLE_SIZE); //make sure theres room for a new record
-        index = hash(entry.key);
-        while (table[index].key != -1 && table[index].key != -999) {
-            index = (index + 1) % TABLE_SIZE;
+        assert(size() < TABLE_SIZE); //ensure there's room for a new record
+
+        int attempt = 0;
+        while (attempt < TABLE_SIZE) {
+            index = linearProbe(entry.key, attempt);
+
+            if (table[index].key == -1 || table[index].key == -999) { //empty or deleted slot
+                table[index] = entry;
+                used++;
+                return;
+            }
+            attempt++;
         }
-        table[index] = entry;
-        used++;
+
+        cout << "Unable to insert key: " << entry.key << ". Hash table is full.\n";
     }
 }
 
@@ -82,7 +98,7 @@ void HashTable::remove(int key) {
         return;
     }
 
-    table[index].key = -999;
+    table[index].key = -999; //mark slot as deleted
     used--;
 
     cout << "Key " << key << " removed.\n";
@@ -138,7 +154,7 @@ int main() {
         choice = toupper(choice);
 
         switch (choice) {
-            case 'I': // insert
+            case 'I': //insert
                 cout << "Enter key (int >= 0) for record: ";
                 cin >> rec.key;
                 cout << "Enter data (int) for record: ";
@@ -148,7 +164,7 @@ int main() {
                 dataTable.print();
                 break;
 
-            case 'F': // find
+            case 'F': //find
                 cout << "Enter key (int >= 0) to search for: ";
                 cin >> key;
                 dataTable.find(key, found, rec);
@@ -161,19 +177,19 @@ int main() {
                 }
                 break;
 
-            case 'S': // size
+            case 'S': //size
                 cout << "There are " << dataTable.size() << " records in the table.\n";
                 cout << "There are " << (TABLE_SIZE - dataTable.size()) << " empty slots left in the table.\n\n";
                 break;
 
-            case 'R': // remove
+            case 'R': //remove
                 cout << "Enter key (int >= 0) to remove: ";
                 cin >> key;
                 dataTable.remove(key);
                 dataTable.print();
                 break;
 
-            case 'Q': // quit
+            case 'Q': //quit
                 cout << "Exiting program.\n";
                 break;
 

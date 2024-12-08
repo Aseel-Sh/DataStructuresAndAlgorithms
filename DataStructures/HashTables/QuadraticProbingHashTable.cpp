@@ -176,9 +176,8 @@ int main() {
     ht.insert(72, 300); 
     ht.insert(15, 100);
     ht.insert(46, 200);
-    ht.insert(77, 300);
-    ht.insert(108, 300);
-    ht.insert(139, 300);     
+    ht.insert(5, 300);
+    ht.insert(20, 300);   
 
     cout << "Initial Table:\n";
     ht.print();

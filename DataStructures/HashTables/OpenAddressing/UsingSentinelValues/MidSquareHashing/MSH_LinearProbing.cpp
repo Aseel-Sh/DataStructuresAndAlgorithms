@@ -8,12 +8,14 @@ using namespace std;
 
 typedef int ItemType; 
 const int TABLE_SIZE = 31; 
+const int EMPTY = -1;
+const int DELETED = -999;
 
 struct TableNode {
     int key;         
     ItemType data;   
 
-    TableNode() : key(-1), data(0) {} //-1 means empty
+    TableNode() : key(EMPTY), data(0) {} //EMPTY means empty
 };
 
 class HashTable {
@@ -37,7 +39,7 @@ private:
 HashTable::HashTable() {
     used = 0;
     for (int i = 0; i < TABLE_SIZE; i++) {
-        table[i].key = -1;
+        table[i].key = EMPTY;
     }
 }
 
@@ -63,7 +65,7 @@ void HashTable::findIndex(int key, bool& found, int& index) const {
     while (attempt < TABLE_SIZE) {
         index = midSquareHash(key, attempt);
 
-        if (table[index].key == -1 || (table[index].key == key && table[index].key != -999)) {
+        if (table[index].key == EMPTY || (table[index].key == key && table[index].key != DELETED)) {
             found = (table[index].key == key);
             return;
         }
@@ -92,7 +94,7 @@ void HashTable::insert(const TableNode& entry) {
         while (attempt < TABLE_SIZE) {
             index = midSquareHash(entry.key, attempt);
 
-            if (table[index].key == -1 || table[index].key == -999) {
+            if (table[index].key == EMPTY || table[index].key == DELETED) {
                 table[index] = entry;
                 used++;
                 return;
@@ -115,7 +117,7 @@ void HashTable::remove(int key) {
         return;
     }
 
-    table[index].key = -999;
+    table[index].key = DELETED;
     used--;
 
     cout << "Key " << key << " removed.\n";
@@ -139,7 +141,7 @@ void HashTable::print() const {
     cout << "Index   Key   Data\n";
     for (int i = 0; i < TABLE_SIZE; i++) {
         cout << setw(5) << i << setw(6) << table[i].key;
-        if (table[i].key != -1 && table[i].key != -999) {
+        if (table[i].key != EMPTY && table[i].key != DELETED) {
             cout << setw(8) << table[i].data;
         }
         cout << endl;

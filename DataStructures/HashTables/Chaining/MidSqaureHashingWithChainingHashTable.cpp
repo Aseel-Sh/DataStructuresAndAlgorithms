@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <math.h>
 using namespace std;
 
 typedef int ItemType; 
@@ -24,10 +25,14 @@ private:
     Node* table[TABLE_SIZE]; //arr of ptrs to linked lists
 
     int midSquareHash(int key) const {
-        int squared = key * key;
-        string squaredStr = to_string(squared);
-        int start = (squaredStr.length() / 2) - 1;
-        int middleDigits = stoi(squaredStr.substr(start, 3));
+        long long squared = static_cast<long long>(key) * key;
+
+        if (squared < 100) {
+            return squared % TABLE_SIZE;
+        }
+        
+        int totalDigits = log10(squared) + 1;  
+        int middleDigits = (squared / static_cast<int>(pow(10, totalDigits / 2 - 1))) % 1000;
         return middleDigits % TABLE_SIZE;
     }
 

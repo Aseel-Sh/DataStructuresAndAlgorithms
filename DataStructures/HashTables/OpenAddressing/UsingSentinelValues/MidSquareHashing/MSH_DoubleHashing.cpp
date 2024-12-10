@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cassert>
+#include <math.h>
 using namespace std;
 
 typedef int ItemType; 
@@ -41,9 +42,16 @@ HashTable::HashTable() {
 
 //primary hash using midsquare method
 int HashTable::midSquareHash(int key) const {
-    long squared = static_cast<long>(key) * key; //square the key
-    int middle = (squared / 100) % 1000; //take middle digits
-    return middle % TABLE_SIZE;
+    long long squared = static_cast<long long>(key) * key; 
+
+    if (squared < 100) {
+        return squared % TABLE_SIZE;
+    }
+
+    int totalDigits = log10(squared) + 1;          
+    int divisor = pow(10, totalDigits / 2 - 1);           
+    int middle = (squared / divisor) % 1000;     
+    return middle % TABLE_SIZE; 
 }
 
 //secondary hash function to reduce clustering
@@ -79,7 +87,11 @@ void HashTable::insert(const TableNode& entry) {
     if (alreadyThere) {
         table[index].data = entry.data; //update data if key exists
     } else {
-        assert(size() < TABLE_SIZE); //table should not be full
+
+        if (size() == TABLE_SIZE) {
+            cout << "Unable to insert key: " << entry.key << ". Hash table is full.\n";
+            return;
+        } //table should not be full
 
         int attempt = 0;
         while (attempt < TABLE_SIZE) {

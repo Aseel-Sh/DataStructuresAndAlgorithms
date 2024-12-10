@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>
 #include <cassert>
+#include <math.h>
 using namespace std;
 
 //try 10, 40, 71,
@@ -44,10 +45,17 @@ int HashTable::hash(int key) const {
     return key % TABLE_SIZE;
 }
 
-int HashTable::midSquareHash(int key, int attempt) const {
-    long squared = static_cast<long>(key) * key; //square the key
-    int middle = (squared / 100) % 1000; //take the middle portion
-    return (middle + attempt) % TABLE_SIZE;
+int HashTable::midSquareHash(int key, int attempt) const {   
+    long long squared = static_cast<long long>(key) * key; 
+
+    if (squared < 100) { //if square val is small
+        return squared % TABLE_SIZE;
+    }
+
+    int totalDigits = log10(squared) + 1;          
+    int divisor = pow(10, totalDigits / 2 - 1);           
+    int middle = (squared / divisor) % 1000;     
+    return (middle + attempt) % TABLE_SIZE; 
 }
 
 void HashTable::findIndex(int key, bool& found, int& index) const {
@@ -73,7 +81,12 @@ void HashTable::insert(const TableNode& entry) {
     if (alreadyThere) {
         table[index].data = entry.data;
     } else {
-        assert(size() < TABLE_SIZE);
+        
+        if (size() == TABLE_SIZE) {
+            cout << "Unable to insert key: " << entry.key << ". Hash table is full.\n";
+            return;
+        }
+
 
         int attempt = 0;
         while (attempt < TABLE_SIZE) {

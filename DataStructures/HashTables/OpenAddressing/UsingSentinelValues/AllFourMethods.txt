@@ -1,0 +1,83 @@
+
+//Normal Hash
+    int HashTable::hash(int key) const {
+        return key % TABLE_SIZE;
+    }
+
+//midsquare hashing linearProbe
+    int HashTable::midSquareHash(int key, int attempt) const {
+        long long squared = static_cast<long long>(key) * key; 
+
+        if (squared < 100) {
+            return squared % TABLE_SIZE;
+        }
+
+        int totalDigits = log10(squared) + 1;          
+        int divisor = pow(10, totalDigits / 2 - 1);           
+        int middle = (squared / divisor) % 1000;     
+        return (middle + attempt) % TABLE_SIZE; 
+    }
+
+//midsquare hashing quadraticProbe
+    int HashTable::midSquareHash(int key, int attempt) const {
+        long long squared = static_cast<long long>(key) * key; 
+
+        if (squared < 100) {
+            return squared % TABLE_SIZE;
+        }
+
+        int totalDigits = log10(squared) + 1;          
+        int divisor = pow(10, totalDigits / 2 - 1);           
+        int middle = (squared / divisor) % 1000;     
+        return (middle + attempt * attempt) % TABLE_SIZE; 
+    }
+
+//midsquare hashing doubleHash
+    int HashTable::midSquareHash(int key) const {
+    long long squared = static_cast<long long>(key) * key; 
+
+    if (squared < 100) {
+        return squared % TABLE_SIZE;
+    }
+
+    int totalDigits = log10(squared) + 1;          
+    int divisor = pow(10, totalDigits / 2 - 1);           
+    int middle = (squared / divisor) % 1000;     
+    return middle % TABLE_SIZE; 
+}
+
+//midsquare chaining
+    int midSquareHash(int key) const {
+        long long squared = static_cast<long long>(key) * key;
+
+        if (squared < 100) {
+            return squared % TABLE_SIZE;
+        }
+        
+        int totalDigits = log10(squared) + 1;  
+        int middleDigits = (squared / static_cast<int>(pow(10, totalDigits / 2 - 1))) % 1000;
+        return middleDigits % TABLE_SIZE;
+    }
+
+
+open addressing linearprobe
+    int HashTable::linearProbe(int key, int attempt) const {
+        return (hash(key) + attempt) % TABLE_SIZE;
+    }
+
+open addressing quadraticProbe
+    int HashTable::quadraticProbe(int key, int attempt) const {
+        return (hash(key) + attempt * attempt) % TABLE_SIZE;
+    }
+
+open addressing doubleHash
+    int HashTable::doubleHash(int key, int attempt) const {
+        int hash2 = 1 + (key % (TABLE_SIZE - 1));
+        return (hash(key) + attempt * hash2) % TABLE_SIZE;
+    }
+
+closed addressing chaining
+    using linkedlists
+
+
+

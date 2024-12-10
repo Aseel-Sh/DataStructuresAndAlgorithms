@@ -16,9 +16,9 @@ struct TableNode {
 class HashTable {
 public:
     HashTable();
-    void insert(const TableNode& entry);
+    void insert(int key, int data);
     void remove(int key);
-    void find(int key, bool& found, TableNode& result) const;
+    void find(int key, bool& found, int& data) const;
     int size() const;
     void print() const;
 
@@ -61,29 +61,29 @@ void HashTable::findIndex(int key, bool& found, int& index) const {
     found = false;
 }
 
-void HashTable::insert(const TableNode& entry) {
+void HashTable::insert(int key, int data) {
     bool alreadyThere;
     int index;
 
-    findIndex(entry.key, alreadyThere, index);
+    findIndex(key, alreadyThere, index);
     if (alreadyThere) {
-        table[index].data = entry.data; //update existing record
+        table[index].data = data; //update existing record
     } else {
         assert(size() < TABLE_SIZE); //ensure there's room for a new record
 
         int attempt = 0;
         while (attempt < TABLE_SIZE) {
-            index = linearProbe(entry.key, attempt);
+            index = linearProbe(key, attempt);
 
             if (table[index].key == -1 || table[index].key == -999) { //empty or deleted slot
-                table[index] = entry;
+                table[index].key = key;
+                table[index]. data = data;
                 used++;
                 return;
             }
             attempt++;
         }
 
-        cout << "Unable to insert key: " << entry.key << ". Hash table is full.\n";
     }
 }
 
@@ -104,12 +104,12 @@ void HashTable::remove(int key) {
     cout << "Key " << key << " removed.\n";
 }
 
-void HashTable::find(int key, bool& found, TableNode& result) const {
+void HashTable::find(int key, bool& found, int& data) const {
     int index;
     findIndex(key, found, index);
 
     if (found) {
-        result = table[index];
+        data = table[index].data;
     }
 }
 
@@ -141,8 +141,7 @@ void print_menu() {
 
 int main() {
     HashTable dataTable;
-    TableNode rec;
-    int key;
+    int key, data;
     bool found;
     char choice;
 
@@ -156,10 +155,10 @@ int main() {
         switch (choice) {
             case 'I': //insert
                 cout << "Enter key (int >= 0) for record: ";
-                cin >> rec.key;
+                cin >> key;
                 cout << "Enter data (int) for record: ";
-                cin >> rec.data;
-                dataTable.insert(rec);
+                cin >> data;
+                dataTable.insert(key, data);
                 cout << "Record inserted.\n";
                 dataTable.print();
                 break;
@@ -167,11 +166,11 @@ int main() {
             case 'F': //find
                 cout << "Enter key (int >= 0) to search for: ";
                 cin >> key;
-                dataTable.find(key, found, rec);
+                dataTable.find(key, found, data);
                 if (found) {
                     cout << "Record found:\n";
-                    cout << "   Key  = " << rec.key << "\n";
-                    cout << "   Data = " << rec.data << "\n\n";
+                    cout << "   Key  = " << key << "\n";
+                    cout << "   Data = " << data << "\n\n";
                 } else {
                     cout << "Record with key " << key << " not found.\n\n";
                 }

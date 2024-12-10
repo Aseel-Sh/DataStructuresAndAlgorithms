@@ -157,3 +157,66 @@ int main() {
 
     return 0;
 }
+
+// int main() {
+//     HashTable ht;
+//     int choice, key, data;
+
+//     do {
+//         cout << "\nHash Table Menu:\n";
+//         cout << "1. Insert\n";
+//         cout << "2. Remove\n";
+//         cout << "3. Find\n";
+//         cout << "4. Print Table\n";
+//         cout << "5. Exit\n";
+//         cout << "Enter your choice: ";
+//         cin >> choice;
+
+//         switch (choice) {
+//         case 1: 
+//             cout << "Enter key: ";
+//             cin >> key;
+//             cout << "Enter data: ";
+//             cin >> data;
+//             if (ht.insert(key, data)) {
+//                 cout << "Entry inserted successfully.\n";
+//             } else {
+//                 cout << "Key already exists. Data updated.\n";
+//             }
+//             break;
+
+//         case 2: 
+//             cout << "Enter key to remove: ";
+//             cin >> key;
+//             if (ht.remove(key)) {
+//                 cout << "Entry removed successfully.\n";
+//             } else {
+//                 cout << "Key not found.\n";
+//             }
+//             break;
+
+//         case 3: 
+//             cout << "Enter key to find: ";
+//             cin >> key;
+//             if (ht.find(key, data)) {
+//                 cout << "Key found with data: " << data << endl;
+//             } else {
+//                 cout << "Key not found.\n";
+//             }
+//             break;
+
+//         case 4: 
+//             ht.print();
+//             break;
+
+//         case 5: 
+//             cout << "Exiting program.\n";
+//             break;
+
+//         default:
+//             cout << "Invalid choice. Please try again.\n";
+//         }
+//     } while (choice != 5);
+
+//     return 0;
+// }
